@@ -1,25 +1,48 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
-	const [count, setCount] = useState(0);
+	const URL = `https://pokeapi.co/api/v2/pokemon/`;
+	const [pokemon, setpokemon] = useState(1);
+	const [pokeData, setPokeData] = useState({});
+
+	async function fetchPokemonData() {
+		fetch(URL + pokemon)
+			.then((res) => res.json())
+			.then(setPokeData);
+	}
+
+	useEffect(() => {
+		fetchPokemonData(pokemon);
+	}, [pokemon]);
+
+	const ConditionalHTML = pokeData.name ? (
+		<>
+			<h1>{pokeData.name.toUpperCase()}</h1>
+			<img
+				src={pokeData.sprites.front_default}
+				style={{
+					height: "40vh",
+				}}
+			/>
+		</>
+	) : (
+		<></>
+	);
+
 	return (
 		<div className="App">
-			<h1>THE COUNT IS: {count}</h1>
+			<h1>useEffect Hook Demo</h1>
+			<h2>Input a Pokemon's Name (or Number)</h2>
+			<input id="user-input" />
 			<button
-				onClick={() => {
-					setCount(count + 1);
+				onClick={(e) => {
+					setpokemon(document.querySelector("#user-input").value);
 				}}
 			>
-				+
+				LOOK UP POKEMON
 			</button>
-			<button
-				onClick={() => {
-					setCount(count - 1);
-				}}
-			>
-				-
-			</button>
+			{ConditionalHTML}
 		</div>
 	);
 }
