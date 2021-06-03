@@ -12,14 +12,14 @@ function App() {
 					setCount(count + 1);
 				}}
 			>
-				+
+				➕1️⃣
 			</button>
 			<button
 				onClick={() => {
 					setCount(count - 1);
 				}}
 			>
-				-
+				➖1️⃣
 			</button>
 		</div>
 	);
