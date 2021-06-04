@@ -1,49 +1,68 @@
 import "./App.css";
 import { useState, useEffect } from "react";
+import AppContext from "./Contexts/AppContext";
+import PokemonView from "./Components/PokemonView";
+import PokemonSearch from "./Components/PokemonSearch";
 
 function App() {
 	const URL = `https://pokeapi.co/api/v2/pokemon/`;
-	const [pokemon, setpokemon] = useState(1);
-	const [pokeData, setPokeData] = useState({});
-
-	async function fetchPokemonData() {
-		fetch(URL + pokemon)
-			.then((res) => res.json())
-			.then(setPokeData);
-	}
+	const [pokemon, setPokemon] = useState(1);
+	const [pokeData, setPokeData] = useState(false);
+	const [speciesData, setSpeciesData] = useState(false);
+	const [language, setLanguage] = useState(false);
+	const [version, setVersion] = useState(false);
 
 	useEffect(() => {
-		fetchPokemonData(pokemon);
+		// fetch data when user enters pokemon (i.e. when pokemon state value changes)
+		function fetchPokemonData() {
+			fetch(URL + pokemon)
+				.then((res) => res.json())
+				.then((pokedata) => {
+					setPokeData(pokedata);
+				});
+		}
+		fetchPokemonData();
 	}, [pokemon]);
 
-	const ConditionalHTML = pokeData.name ? (
-		<>
-			<h1>{pokeData.name.toUpperCase()}</h1>
-			<img
-				src={pokeData.sprites.front_default}
-				style={{
-					height: "40vh",
-				}}
-			/>
-		</>
-	) : (
-		<></>
-	);
+	useEffect(() => {
+		// get species data when pokeData state value changes
+		function fetchSpeciesData() {
+			if (pokeData.species) {
+				fetch(pokeData.species.url)
+					.then((res) => res.json())
+					.then((speciesData) => {
+						setVersion(speciesData.flavor_text_entries[0].version.name);
+						setSpeciesData(speciesData);
+					});
+			}
+		}
+		fetchSpeciesData();
+	}, [pokeData]);
+
+	useEffect(() => {
+		setLanguage(`en`); // reset the language to english (the only language on all versions) when the version changes
+	}, [version]);
 
 	return (
-		<div className="App">
-			<h1>useEffect Hook Demo</h1>
-			<h2>Input a Pokemon's Name (or Number)</h2>
-			<input id="user-input" />
-			<button
-				onClick={(e) => {
-					setpokemon(document.querySelector("#user-input").value);
-				}}
-			>
-				LOOK UP POKEMON
-			</button>
-			{ConditionalHTML}
-		</div>
+		<AppContext.Provider
+			value={{
+				setPokemon,
+				speciesData,
+				pokeData,
+				language,
+				setLanguage,
+				version,
+				setVersion,
+				// flavorTextEntries,
+			}}
+		>
+			<div className="App">
+				<h1>useContext Hook Demo</h1>
+				<h2>🔻🔻🔻 Remember This? 🔻🔻🔻</h2>
+				<PokemonSearch />
+				{pokeData.name && speciesData.name ? <PokemonView /> : <></>}
+			</div>
+		</AppContext.Provider>
 	);
 }
 
