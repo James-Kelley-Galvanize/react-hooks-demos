@@ -19,7 +19,7 @@ function App() {
 				.then((res) => res.json())
 				.then((pokedata) => {
 					setPokeData(pokedata);
-					setVersion(pokedata.game_indices[0].version.name);
+					setVersion(pokedata.game_indices[0].version.name); // reset version to the first version that this pokemon appeared in
 				});
 		}
 		fetchPokemonData();
@@ -54,7 +54,6 @@ function App() {
 				setLanguage,
 				version,
 				setVersion,
-				// flavorTextEntries,
 			}}
 		>
 			<div className="App">

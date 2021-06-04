@@ -19,8 +19,6 @@ function Controllers() {
 		useContext(AppContext);
 	const flavorTextEntries = version ? speciesData.flavor_text_entries : [];
 
-	// console.log(`flavortext in controllers`, flavorTextEntries);
-
 	const languages = flavorTextEntries
 		? flavorTextEntries
 				.filter((entry) => entry.version.name === version)
@@ -32,13 +30,18 @@ function Controllers() {
 		return set;
 	}, new Set());
 
+	const versions = [...versionsSet]; // spread the versionsSet into an array
+
 	const languageButtons = languages.map((langName) => {
 		const isSelectedLang = langName === language;
 		return (
 			<button
 				key={langName}
 				style={{
-					fontSize: isSelectedLang ? `large` : `medium`,
+					border: `0.16em solid rgba(255,255,255,0)`,
+					borderRadius: `2em`,
+					fontWeight: `bold`,
+					backgroundColor: isSelectedLang ? `lightgreen` : `lightgrey`,
 					margin: "1px",
 				}}
 				onClick={() => setLanguage(langName)}
@@ -48,16 +51,18 @@ function Controllers() {
 		);
 	});
 
-	const versionButtons = [...versionsSet].map((ver) => {
-		// spread the versionsSet into an array
+	const versionButtons = versions.map((ver) => {
 		const isSelectedVersion = version === ver;
 		return (
 			<button
 				key={ver}
 				onClick={() => setVersion(ver)}
 				style={{
-					fontSize: isSelectedVersion ? `large` : `medium`,
-					margin: "1px",
+					border: `0.16em solid rgba(255,255,255,0)`,
+					borderRadius: `2em`,
+					fontWeight: isSelectedVersion ? `bolder` : `bold`,
+					backgroundColor: isSelectedVersion ? `lightgreen` : `lightgrey`,
+					margin: "2px",
 				}}
 			>
 				{ver}
@@ -65,9 +70,28 @@ function Controllers() {
 		);
 	});
 
+	function VersionButtonRows() {
+		return versionButtons
+			.reduce((arr, button, index) => {
+				let rowNum = Math.floor(index / 10);
+				if (!arr[rowNum]) arr[rowNum] = [];
+				arr[rowNum].push(button);
+				return arr;
+			}, [])
+			.map((row, index) => (
+				<div className="version-button-row" key={`row` + index}>
+					{row}
+				</div>
+			));
+	}
+
 	return (
 		<div id="controllers">
-			<div id="version-selector">{versionButtons}</div>
+			<h4>Versions</h4>
+			<div id="version-selector">
+				<VersionButtonRows />
+			</div>
+			<h4>Languages</h4>
 			<div id="language-selector">{languageButtons}</div>
 		</div>
 	);

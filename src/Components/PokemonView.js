@@ -9,11 +9,11 @@ function PokemonView() {
 		<div>
 			{version ? ( // Conditional render w/ ternary
 				<>
-					<h1>{pokeData.name.toUpperCase()}</h1>
+					<h3>{pokeData.name.toUpperCase()}</h3>
 					<img
 						src={pokeData.sprites.front_default}
 						style={{
-							height: "30vh",
+							height: "25vh",
 						}}
 						alt={`pokeData.name`}
 					/>
