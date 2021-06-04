@@ -32,24 +32,26 @@ function Controllers() {
 
 	const versions = [...versionsSet]; // spread the versionsSet into an array
 
-	const languageButtons = languages.map((langName) => {
-		const isSelectedLang = langName === language;
-		return (
-			<button
-				key={langName}
-				style={{
-					border: `0.16em solid rgba(255,255,255,0)`,
-					borderRadius: `2em`,
-					fontWeight: `bold`,
-					backgroundColor: isSelectedLang ? `lightgreen` : `lightgrey`,
-					margin: "1px",
-				}}
-				onClick={() => setLanguage(langName)}
-			>
-				{languageNames[langName]}
-			</button>
-		);
-	});
+	function LanguageButtons() {
+		return languages.map((langName) => {
+			const isSelectedLang = langName === language;
+			return (
+				<button
+					key={langName}
+					style={{
+						border: `0.16em solid rgba(255,255,255,0)`,
+						borderRadius: `2em`,
+						fontWeight: `bold`,
+						backgroundColor: isSelectedLang ? `lightgreen` : `lightgrey`,
+						margin: "1px",
+					}}
+					onClick={() => setLanguage(langName)}
+				>
+					{languageNames[langName]}
+				</button>
+			);
+		});
+	}
 
 	const versionButtons = versions.map((ver) => {
 		const isSelectedVersion = version === ver;
@@ -92,7 +94,9 @@ function Controllers() {
 				<VersionButtonRows />
 			</div>
 			<h4>Languages</h4>
-			<div id="language-selector">{languageButtons}</div>
+			<div id="language-selector">
+				<LanguageButtons />
+			</div>
 		</div>
 	);
 }

@@ -10,7 +10,10 @@ function PokemonSearch() {
 			<input id="user-input" />
 			<button
 				onClick={(e) => {
-					setPokemon(document.querySelector("#user-input").value);
+					const newPokemonNum = document.querySelector("#user-input").value;
+					if (newPokemonNum > 0 && newPokemonNum < 899) {
+						setPokemon(newPokemonNum);
+					}
 				}}
 			>
 				LOOK UP POKEMON
