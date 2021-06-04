@@ -5,7 +5,6 @@ import PokemonView from "./Components/PokemonView";
 import PokemonSearch from "./Components/PokemonSearch";
 
 function App() {
-	const URL = `https://pokeapi.co/api/v2/pokemon/`;
 	const [pokemon, setPokemon] = useState(1);
 	const [pokeData, setPokeData] = useState(false);
 	const [speciesData, setSpeciesData] = useState(false);
@@ -14,11 +13,13 @@ function App() {
 
 	useEffect(() => {
 		// fetch data when user enters pokemon (i.e. when pokemon state value changes)
+		const URL = `https://pokeapi.co/api/v2/pokemon/`;
 		function fetchPokemonData() {
 			fetch(URL + pokemon)
 				.then((res) => res.json())
 				.then((pokedata) => {
 					setPokeData(pokedata);
+					setVersion(pokedata.game_indices[0].version.name);
 				});
 		}
 		fetchPokemonData();

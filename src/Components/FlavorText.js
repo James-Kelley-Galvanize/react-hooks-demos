@@ -2,33 +2,22 @@ import { useContext } from "react";
 import AppContext from "../Contexts/AppContext";
 
 function FlavorText() {
-	const { speciesData, version, language, setLanguage } =
-		useContext(AppContext);
+	const { speciesData, version, language } = useContext(AppContext);
 
 	const flavorTextEntries = speciesData.flavor_text_entries;
 
-	const correctLangEntry = flavorTextEntries.find(
-		(entry) =>
-			entry.version.name === version && entry.language.name === language
-	);
-	if (!correctLangEntry) {
-		// setLanguage(`en`);
-	}
-	const correctFlavorText = !flavorTextEntries
-		? ``
-		: correctLangEntry
-		? correctLangEntry.flavor_text
-		: flavorTextEntries.find((entry) => entry.version.name === version)
-				.flavor_text;
+	const correctFlavorText = flavorTextEntries.reduce((str, entry) => {
+		if (entry.version.name === version && entry.language.name === language)
+			str += entry.flavor_text;
+		return str;
+	}, ``);
 
-	return flavorTextEntries ? (
+	return (
 		<>
 			<div id="flavor-text" style={{ margin: `2%` }}>
 				{correctFlavorText}
 			</div>
 		</>
-	) : (
-		<></>
 	);
 }
 

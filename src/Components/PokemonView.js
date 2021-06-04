@@ -13,8 +13,9 @@ function PokemonView() {
 					<img
 						src={pokeData.sprites.front_default}
 						style={{
-							height: "40vh",
+							height: "30vh",
 						}}
+						alt={`pokeData.name`}
 					/>
 					<FlavorText />
 					<Controllers />
