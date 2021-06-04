@@ -19,7 +19,11 @@ function App() {
 				.then((res) => res.json())
 				.then((pokedata) => {
 					setPokeData(pokedata);
-					setVersion(pokedata.game_indices[0].version.name); // reset version to the first version that this pokemon appeared in
+					setVersion(
+						pokedata.game_indices[0] // this ternary is necessary to handle issues with pokemon with high numbers not having game_indices, despite being in games (try Gets for pokemon #677 to the /pokemon/ and /pokemon-species/ endpoints in your Postman to see this)
+							? pokedata.game_indices[0].version.name
+							: ``
+					); // reset version to the first version that this pokemon appeared in
 				});
 		}
 		fetchPokemonData();
