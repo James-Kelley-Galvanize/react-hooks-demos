@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 function App() {
 	const URL = `https://pokeapi.co/api/v2/pokemon/`;
-	const [pokemon, setpokemon] = useState(1);
+	const [pokemon, setPokemon] = useState(1);
 	const [pokeData, setPokeData] = useState({});
 
 	async function fetchPokemonData() {
@@ -37,7 +37,7 @@ function App() {
 			<input id="user-input" />
 			<button
 				onClick={(e) => {
-					setpokemon(document.querySelector("#user-input").value);
+					setPokemon(document.querySelector("#user-input").value);
 				}}
 			>
 				LOOK UP POKEMON
